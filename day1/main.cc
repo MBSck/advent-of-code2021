@@ -2,70 +2,25 @@
 #include <stdlib.h>
 #include <vector>
 
-int count_depth_increase(const char *file_name);
-int count_depth_average_increase(const char *file_name);
-float average(std::vector<int> values);
+#include "readfile.h"
 
-int readFileToVector(const char *file_name, std::vector<int> &values) {
-  if (!file) {
-    while ((file, line)) {
-      if (atoi(line.c_str()) > measurement) {
-        counter++;
-      }
-      measurement = std::stoi(line.c_str());
-    }
-  }
-}
+float average(std::vector<int> &numbers);
+int count_depth_increase(std::vector<int> &numbers);
+int count_depth_average_increase(std::vector<int> &numbers);
 
 
 int main() {
-  std::string file_name = "depth.txt";
-  int counter = count_depth_increase(file_name);
-  printf("Number of individual increases:%d \n", counter);
+  const char *file_name = "depths.txt";
+  std::vector<int> numbers;
+  readFileToVector(file_name, numbers);
 
-  counter = count_depth_average_increase(file_name);
+  int counter = count_depth_increase(numbers);
+  printf("Number of individual increases: %d \n", counter);
+
+  counter = count_depth_average_increase(numbers);
   printf("Number of averaged increases: %d\n", counter);
 }
 
-int count_depth_increase(std::string file_name) {
-  const char *file_name = "depth.txt";
-  FILE *file = fopen(file_name, "r");
-
-  int counter = -1;
-  int measurement = 0;
-
-  if (!file) {
-    while ()) {
-        counter++;
-      }
-      measurement = std::stoi(line.c_str());
-    }
-  }
-  return counter;
-}
-
-int count_depth_average_increase(const char *file_name) {
-  const char *file_name = "depth.txt";
-  FILE *file = fopen(file_name, "r");
-
-  int counter = 0;
-  int measurement = 0;
-  std::vector<int> values;
-
-  if (file.is_open()) {
-    while (std::getline(file, line)) {
-      values.push_back(std::stoi(line.c_str()));
-    }
-  }
-  for (int i = 0; i < values.size(); i++) {
-    float avg = average(std::vector<int>(values.begin() + i, values.begin() + i + 3));
-    float avg_next = average(std::vector<int>(values.begin() + i + 1, values.begin() + i + 4));
-    if (avg_next > avg) {
-      counter++;
-    }
-  }
-  return counter;
-}
 
 float average(std::vector<int> values) {
   float avg = 0;
@@ -74,4 +29,28 @@ float average(std::vector<int> values) {
   }
   avg /= values.size();
   return avg;
+}
+
+
+int count_depth_increase(std::vector<int> &numbers) {
+  int count = 0;
+  for (int i = 1; i < numbers.size(); i++) {
+    if (numbers.at(i-1) < numbers.at(i)) {
+      count++;
+    }
+  }
+  return count;
+}
+
+
+int count_depth_average_increase(std::vector<int> &numbers) {
+  int count = 0;
+  for (int i = 0; i < numbers.size(); i++) {
+    float prev = average(std::vector<int>(numbers.begin()+i, numbers.begin()+i+3));
+    float current = average(std::vector<int>(numbers.begin()+i+1, numbers.begin()+i+4));
+    if (current > prev) {
+      count++;
+    }
+  }
+  return count;
 }
