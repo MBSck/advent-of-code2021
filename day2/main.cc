@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include <stdio.h>
 #include <vector>
 #include <string>
@@ -18,7 +17,7 @@ Movement get3DMovement(std::vector<std::pair<std::string, int>> &values);
 
 
 int main() {
-  const char *file_name = "movement.txt";
+  const char *file_name = "input.txt";
   std::vector<std::pair<std::string, int>> values;
   readFileToVectorTuple(file_name, values);
   Movement movement = get2DMovement(values);

@@ -4,7 +4,8 @@
 #include <string>
 #include <vector>
 
-int readFileToVector(const char *file_name, std::vector<int> &numbers);
+int readFileToIntVector(const char *file_name, std::vector<int> &numbers);
+int readFileToStringVector(const char *file_name, std::vector<std::string> &strings);
 int readFileToVectorTuple(const char *file_name, std::vector<std::pair<std::string, int>> &values);
 
-#endif
+#endif // __READFILE__

@@ -7,7 +7,7 @@
 #include "readfile.h"
 
 
-int readFileToVector(const char *file_name, std::vector<int> &numbers) {
+int readFileToIntVector(const char *file_name, std::vector<int> &numbers) {
   FILE *file = fopen(file_name, "r");
   if (!file) {
     printf("Unable to read file %s!\n", file_name);
@@ -21,6 +21,19 @@ int readFileToVector(const char *file_name, std::vector<int> &numbers) {
   return 0;
 }
 
+int readFileToStringVector(const char *file_name, std::vector<std::string> &strings) {
+  FILE *file = fopen(file_name, "r");
+  if (!file) {
+    printf("Unable to read file %s!\n", file_name);
+    return -1;
+  }
+
+  char string[100];
+  while (fscanf(file, "%s", string) != EOF) {
+    strings.emplace_back(string);
+  }
+  return 0;
+}
 
 int readFileToVectorTuple(const char *file_name, std::vector<std::pair<std::string, int>> &values) {
   FILE *file = fopen(file_name, "r");
