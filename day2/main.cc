@@ -1,56 +1,60 @@
-#include <iostream>
-#include <fstream>
+#include <stdlib.h>
+#include <stdio.h>
 #include <vector>
+#include <string>
 
-std::vector<std::string> split_string(std::string string, const std::string &delimiter);
+#include "readfile.h"
 
-struct Movement;
+
+struct Movement {
+  int depth;
+  int position;
+  int aim;
+};
+
+
+Movement get2DMovement(std::vector<std::pair<std::string, int>> &values);
+Movement get3DMovement(std::vector<std::pair<std::string, int>> &values);
 
 
 int main() {
-  int depth = 0;
-  int position = 0;
+  const char *file_name = "movement.txt";
+  std::vector<std::pair<std::string, int>> values;
+  readFileToVectorTuple(file_name, values);
+  Movement movement = get2DMovement(values);
+  printf("Multiplication of position and depth 2D: %d\n", movement.position*movement.depth);
 
-  const std::string delimiter = " ";
-  Movement movement = Movement();
-
-  std::string line;
-  std::ifstream file("test.txt");
-
-  if (file.is_open()) {
-    while (std::getline(file, line)) {
-      std::vector<std::string> string = split_string(line, delimiter); 
-      std::string command = string.at(0);
-      int value = std::stoi(string.at(1));
-      std::cout << command << " " << value << '\n';
-      switch (command) {
-        case Movement.forward:
-          position += value;
-          break;
-        case "down":
-          depth += value;
-          break;
-        case "up":
-          depth -= value;
-          break;
-      }
-    }
-  }
+  movement = get3DMovement(values);
+  printf("Multiplication of position and depth 3D: %d\n", movement.position*movement.depth);
 }
 
-struct Movement {
-  std::string forward = "forward";
-  std::string down = "down";
-  std::string up = "up";
-};
 
-std::vector<std::string> split_string(std::string string, const std::string &delimiter) {
-  size_t pos;
-  std::vector <std::string> tokens;
-  while ((pos = string.find(delimiter)) != std::string::npos) {
-    tokens.push_back(string.substr(0, pos));
-    string.erase(0, pos + delimiter.length());
+Movement get2DMovement(std::vector<std::pair<std::string, int>> &values) {
+  Movement position {0, 0, 0};
+  for (const auto &value: values) {
+    if (value.first == "forward") {
+      position.position += value.second;
+    } else if (value.first == "down") {
+      position.depth += value.second;
+    } else if (value.first == "up") {
+      position.depth -= value.second;
+    }
   }
-  tokens.push_back(string);
-  return tokens;
+  return position;
+}
+
+
+Movement get3DMovement(std::vector<std::pair<std::string, int>> &values) {
+  Movement position {0, 0, 0};
+  for (const auto &value: values) {
+    if (value.first == "forward") {
+      position.position += value.second;
+      position.depth += position.aim * value.second;
+    } else if (value.first == "down") {
+      position.aim += value.second;
+    } else if (value.first == "up") {
+      position.aim -= value.second;
+    }
+  }
+  return position;
 }
