@@ -17,9 +17,7 @@ Movement get3DMovement(std::vector<std::pair<std::string, int>> &values);
 
 
 int main() {
-  const char *file_name = "input.txt";
-  std::vector<std::pair<std::string, int>> values;
-  readFileToVectorTuple(file_name, values);
+  std::vector<std::pair<std::string, int>> values = readFileToVectorTuple("input.txt");
   Movement movement = get2DMovement(values);
   printf("Multiplication of position and depth 2D: %d\n", movement.position*movement.depth);
 

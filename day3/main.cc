@@ -3,11 +3,12 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <bitset>
 
 #include "readfile.h"
 
-void createMatrix(const std::vector<std::string> &strings,
-                  std::vector<std::vector<int>> &numbers);
+std::vector<int> getRow(const std::vector<std::string> &strings);
+std::vector<std::vector<int>> createMatrix(const std::vector<std::string> &strings);
 int binaryToDecimal(std::string binary);
 bool getMostOccurence(const std::vector<int> &row);
 int getGamma(const std::vector<std::vector<int>> &numbers);
@@ -22,12 +23,8 @@ int getCO2ScrubberRating(const std::vector<std::vector<int>> &numbers,
                          const std::vector<std::string> &strings);
 
 int main() {
-  const char *file_name = "test.txt";
-  std::vector<std::string> strings;
-  readFileToStringVector(file_name, strings);
-
-  std::vector<std::vector<int>> numbers;
-  createMatrix(strings, numbers);
+  std::vector<std::string> strings = readFileToStringVector("test.txt");
+  std::vector<std::vector<int>> numbers = createMatrix(strings);
 
   printf("Gamma x Epsilon %d\n", getGamma(numbers) * getEpsilon(numbers));
   printf("Oxygen Generator Rating %d\n", getOxygenGeneratorRating(numbers, strings));
@@ -37,15 +34,20 @@ int main() {
   return 0;
 }
 
-void createMatrix(const std::vector<std::string> &strings,
-                  std::vector<std::vector<int>> &numbers) {
-  for (int i = 0; i < strings.at(0).size(); i++) {
-    std::vector<int> row;
-    for (const auto &string: strings) {
-      row.push_back(string.at(i) - '0');
-    }
-    numbers.push_back(row);
+std::vector<int> getRow(int index, const std::vector<std::string> &strings) {
+  std::vector<int> row;
+  for (const auto &string: strings) {
+    row.push_back(string.at(index) - '0');
   }
+  return row;
+}
+
+std::vector<std::vector<int>> createMatrix(const std::vector<std::string> &strings) {
+  std::vector<std::vector<int>> numbers;
+  for (int i = 0; i < strings.at(0).size(); i++) {
+    numbers.push_back(getRow(i, strings));
+  }
+  return numbers;
 }
 
 int binaryToDecimal(std::string binary) {
@@ -65,6 +67,7 @@ bool getMostOccurence(const std::vector<int> &row) {
       counter++;
     }
   }
+  printf("counter: %d, length %d\n", counter, static_cast<int>(row.size())-counter);
   if ((counter >= row.size() / 2) | (counter == row.size() / 2)) {
     return true;
   }

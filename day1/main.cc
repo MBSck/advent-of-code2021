@@ -9,9 +9,7 @@ int count_depth_average_increase(std::vector<int> &numbers);
 
 
 int main() {
-  const char *file_name = "input.txt";
-  std::vector<int> numbers;
-  readFileToIntVector(file_name, numbers);
+  std::vector<int> numbers = readFileToIntVector("input.txt");
 
   int counter = count_depth_increase(numbers);
   printf("Number of individual increases: %d \n", counter);
